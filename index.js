@@ -73,7 +73,23 @@ async function run() {
             const result = await orderCollection.deleteOne(query);
             res.send(result);
         });
+        const userCollection = client.db('Manufacturer-tribe').collection('users');
+        app.get('/user', async (req, res) => {
+            const users = await userCollection.find().toArray();
+            res.send(users);
+        });
 
+        app.put('/user/:email', async (req, res) => {
+            const user = req.body;
+            const email = req.params.email;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            }
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
 
 
     }
