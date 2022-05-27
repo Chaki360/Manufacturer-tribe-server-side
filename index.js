@@ -90,6 +90,13 @@ async function run() {
             const result = await userCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         });
+        app.delete('/user/:email', async (req, res) => {
+            const user = req.body;
+            const email = req.params.email;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        });
 
 
     }
