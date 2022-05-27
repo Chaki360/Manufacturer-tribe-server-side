@@ -76,7 +76,7 @@ async function run() {
     }
 };
 run().catch(console.dir);
-app.get('/', (req,) => {
+app.get('/', (req, res) => {
     res.send('Manufacture Tribe Running')
 });
 
