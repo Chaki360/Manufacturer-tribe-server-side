@@ -89,7 +89,7 @@ async function run() {
             res.send(result);
 
         });
-        app.delete('/order/:id', async (req, res) => {
+        app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await orderCollection.deleteOne(query);
@@ -115,6 +115,29 @@ async function run() {
             const result = await userCollection.updateOne(filter, updateDoc, options);
             const token = jwt.sign({ email }, '4dc149c85b84705dc44bd877d2d8792e825a8037a72b7d082a317209232fef9485eb85d420309af67e12542e155be39ff953119d34bf8f0e59bd932ce9ba47ba', { expiresIn: '1h' })
             res.send({ result, token });
+        });
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin })
+        })
+
+        app.put('/user/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email };
+            const updateDoc = {
+                $set: { role: 'admin' },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
+
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
         });
 
 
